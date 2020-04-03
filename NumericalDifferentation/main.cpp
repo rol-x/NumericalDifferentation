@@ -6,7 +6,7 @@ using namespace std;
 
 double f(double x)										// Hard-coded function for numerical analysis.
 {
-	return x * x * x - 2 * x * x + 3 * x - 6;
+	return log(x);
 }
 
 double forwardDifferenceAt(double x, double h, int n)		// D^n[f(x)] = D[D^(n-1)[f(x+h)] - D^(n-1)[f(x)]]
@@ -78,19 +78,19 @@ void solveForAccuracy(double x, double h, int n)
 	double newN = n;
 	cout << "Enter wanted approximation accuracy: ";
 	cin >> accuracy;
+	
 	do
 	{
-		if (accuracy < errorAt(x, newH, n))						// We tweak newH up and down, so that its error is very close to wanted accuracy
-			newH *= 0.95;
-		if (accuracy > errorAt(x, newH, n))
-			newH *= 1.05;
-	} while (abs(accuracy - abs(errorAt(x, newH, n))) > 0.0000001);
-	do
-	{
-		if (accuracy < errorAt(x, h, newN))
-			newN++;
-	} while (abs(accuracy - abs(errorAt(x, h, newN))) > 0.01);
-	cout << "The step value h for accuracy of " << accuracy << " is " << newH << endl;
+		if (accuracy > errorAt(x, newH, n))						// We tweak newH up and down, so that its error is very close to wanted accuracy
+			newH *= 0.98;
+		if (accuracy < errorAt(x, newH, n))
+			newH *= 1.02;
+	} while (abs(accuracy - abs(errorAt(x, newH, n))) > 0.001);
+	
+	while (abs(accuracy - abs(errorAt(x, h, newN))) > 0.001)
+		newN++;
+	
+		cout << "The step value h for accuracy of " << accuracy << " is " << newH << endl;
 	cout << "The diff. order n for accuracy of " << accuracy << " is " << newN << endl;
 	system("pause");
 }
